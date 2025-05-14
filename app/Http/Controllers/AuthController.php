@@ -9,6 +9,7 @@ use App\Models\User;
 class AuthController extends Controller
 {
     // https://laravel.com/docs/9.x/sanctum
+    // https://www.youtube.com/watch?v=099M0k_qoXA&list=PL0qWGthGFUCjFDgYI2k_-TqMNA7925c1s&index=3
 
     /**
      * Register a new user
@@ -47,33 +48,50 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $request->validate([
+        // $request->validate([
+        //     'email' => 'required|string|email',
+        //     'password' => 'required|string',
+        // ]);
+
+        // if (Auth::attempt($request->only('email', 'password'))) {
+        //     $user = Auth::user();
+        //     $token = $user->createToken('secret')->plainTextToken;
+
+        //     return response()->json([
+        //         'user' => $user,
+        //         'token' => $token
+        //     ], 200);
+        // }
+
+        //    return response()->json(['message' => 'Invalid credentials.'], 403);
+
+        $attrs = $request->validate([
             'email' => 'required|string|email',
-            'password' => 'required|string',
+            'password' => 'required|string|min:6',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
-            $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json(['token' => $token], 200);
+        if (!Auth::attempt($attrs)) {
+            return response(['message' => 'Invalid credentials.'], 403);
         }
 
-        return response()->json(['message' => 'Unauthorized'], 401);
+        return response([
+            'user' => auth()->user(),
+            'token' => auth()->user()->createToken('secret')->plainTextToken
+        ], 200);
     }
 
     /**
      * Logout user (Invalidate the token)
      *
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout(Request $request)
+    public function logout()
     {
-        $request->user()->currentAccessToken()->delete();
+        auth()->user()->tokens()->delete();
 
-        return response()->json(['message' => 'Logged out successfully'], 200);
+        return response(['message' => 'Logged out successfully'], 200);
     }
+
 
     /**
      * Get authenticated user
