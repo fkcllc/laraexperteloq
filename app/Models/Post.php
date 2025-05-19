@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use app\Models\User;
-use app\Models\Comment;
-use app\Models\Like;
+use App\Models\User;
+use App\Models\Comment;
+use App\Models\Like;
 
 class Post extends Model
 {

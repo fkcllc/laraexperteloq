@@ -10,60 +10,99 @@ use App\Models\Like;
 
 class PostController extends Controller
 {
-    //
+    //get all posts
     public function index()
     {
 
-        $posts = Post::orderBy('created_at','desc')->with('user:id', 'name', 'image')->get();
+        // $posts = Post::orderBy('created_at','desc')->with('user:id', 'name', 'image')->get();
+        // return response()->json($posts, 200);
 
-        // $posts = Post::orderBy('created_at','desc')->with('user:id', 'name', 'image')->withCount('comments','likes')->get();
-        return response()->json($posts, 200);
+        $posts = Post::orderBy('created_at','desc')->with(['user:id', 'name', 'image'])->withCount('comments','likes')->get();
+        return response(['posts' => $posts], 200);
     }
+
+    //get single post by id
+    public function show($id)
+{
+    $post = Post::where('id', $id)
+        ->with(['user:id,name,image'])
+        ->withCount('comments','likes')
+        ->first();
+
+    if (!$post) {
+        return response()->json(['message' => 'Post not found'], 404);
+    }
+
+    return response(['post' => $post], 200);
+}
+    // {
+    //     // $post = Post::with('user', 'comments', 'likes')->findOrFail($id);
+    //     // $post = Post::where('id', $id)
+    //     //     ->with(['user:id,name,image'])
+    //     //     ->withCount('comments','likes')
+    //     //     ->first();
+    //     // return response()->json($post);
+
+    //     return respose(['post' => PostArr::where('id', $id)->withCount('comments','likes')->get()], 200);
+    // }
+
+
+
+    // insert post
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+        $attrs = $request->validate([
+            // 'title' => 'required|string|max:255',
+            'body' => 'required|string',
         ]);
 
         $post = Post::create([
             'user_id' => auth()->id(),
-            'title' => $request->title,
-            'content' => $request->content,
+            // 'title' => $request->title,
+            'body' => $attrs['body'],
+            // 'image' => $request->image,
         ]);
 
-        return response()->json($post, 201);
+        return response(['message' => 'Post added.','post' => $post],200);
     }
-    public function show($id)
-    {
-        $post = Post::with('user', 'comments', 'likes')->findOrFail($id);
-        return response()->json($post);
-    }
+
+    // update post by id
     public function update(Request $request, $id)
     {
         $post = Post::findOrFail($id);
 
-        if ($post->user_id !== auth()->id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
         }
 
-        $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'content' => 'sometimes|required|string',
+        if ($post->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Permission denied!'], 403);
+        }
+
+        $attrs = $request->validate([
+            'body' => 'required|string',
         ]);
 
-        $post->update($request->only('title', 'content'));
+        $post->update(['body' => $attrs('body')]);
 
-        return response()->json($post);
+        return response(['message' => 'Post updated.','post' => $post],200);
     }
-        public function destroy($id)
-    {
-        $post = Post::findOrFail($id);
 
-        if ($post->user_id !== auth()->id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+    // delete post by id
+    public function destroy($id)
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
         }
 
+        if ($post->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Permission denied'], 403);
+        }
+
+        $post->likes()->delete();
+        $post->comments()->delete();
         $post->delete();
 
         return response()->json(['message' => 'Post deleted successfully']);

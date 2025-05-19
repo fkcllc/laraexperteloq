@@ -37,18 +37,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/posts/{id}', [PostController::class, 'update']);       // Update a post
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);   // Delete a post
     // comments
-    Route::get('/posts/{postId}/comments', [CommentController::class, 'index']); // Get all comments for a post
-    Route::post('/posts/{postId}/comments', [CommentController::class, 'store']); // Create a new comment for a post
-    // Route::get('/posts/{postId}/comments/{id}', [CommentController::class, 'show']); // Read a single comment
+    Route::get('/posts/{id}/comments', [CommentController::class, 'index']); // Get all comments for a post
+    Route::post('/posts/{id}/comments', [CommentController::class, 'store']); // Create a new comment for a post
+    // Route::get('/posts/{id}/comments/{id}', [CommentController::class, 'show']); // Read a single comment
     Route::put('/comments/{id}', [CommentController::class, 'update']); // Update a comment
     Route::delete('comments/{id}', [CommentController::class, 'destroy']); // Delete a comment
     // likes
-    Route::post('/posts/{postId}/likes', [LikeController::class, 'likeOrUnlike']); // Like or Dislike a post
-    // Route::post('/posts/{postId}/like', [LikeController::class, 'like']); // Like a post
-    // Route::post('/posts/{postId}/unlike', [LikeController::class, 'unlike']); // Unlike a post
-    // Route::get('/posts/{postId}/likes', [LikeController::class, 'index']); // Get all likes for a post
-    // Route::get('/posts/{postId}/likes/count', [LikeController::class, 'count']); // Get like count for a post
-    // Route::get('/posts/{postId}/likes/check', [LikeController::class, 'check']); // Check if user liked a post
+    Route::post('/posts/{id}/likes', [LikeController::class, 'likeOrUnlike']); // Like or Dislike a post
+    // Route::post('/posts/{id}/like', [LikeController::class, 'like']); // Like a post
+    // Route::post('/posts/{id}/unlike', [LikeController::class, 'unlike']); // Unlike a post
+    // Route::get('/posts/{id}/likes', [LikeController::class, 'index']); // Get all likes for a post
+    // Route::get('/posts/{id}/likes/count', [LikeController::class, 'count']); // Get like count for a post
+    // Route::get('/posts/{id}/likes/check', [LikeController::class, 'check']); // Check if user liked a post
 });
 
 

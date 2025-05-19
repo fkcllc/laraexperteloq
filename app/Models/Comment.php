@@ -4,9 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use app\Models\User;
-use app\Models\Comment;
-use app\Models\Like;
+use App\Models\User;
 
 class Comment extends Model
 {
@@ -17,5 +15,10 @@ class Comment extends Model
         'post_id',
         'comment',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }
