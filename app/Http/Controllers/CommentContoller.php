@@ -17,7 +17,7 @@ class CommentContoller extends Controller
             return response()->json(['message' => 'Post not found'], 404);
         }
 
-        return response(['post' => $post()->comments()->with(['user:id', 'name', 'image'])->get()], 200);
+        return response(['post' => $post()->comments()->with(['user:id,name,image'])->get()], 200);
     }
 
     //insert comment

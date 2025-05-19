@@ -14,10 +14,7 @@ class PostController extends Controller
     public function index()
     {
 
-        // $posts = Post::orderBy('created_at','desc')->with('user:id', 'name', 'image')->get();
-        // return response()->json($posts, 200);
-
-        $posts = Post::orderBy('created_at','desc')->with(['user:id', 'name', 'image'])->withCount('comments','likes')->get();
+        $posts = Post::orderBy('created_at','desc')->with('user:id,name,image')->withCount('comments','likes')->get();
         return response(['posts' => $posts], 200);
     }
 
