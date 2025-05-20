@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Like;
 
-class LikeContoller extends Controller
+class LikeController extends Controller
 {
     //get all likes of a post
     public function likeOrUnlike($id)
@@ -20,7 +20,7 @@ class LikeContoller extends Controller
         $like = $post->likes()->where('user_id', auth()->id())->first();
 
         if (!$like) {
-            $like::create(
+            Like::create(
                 [
                     'user_id' => auth()->id(),
                     'post_id' => $id,

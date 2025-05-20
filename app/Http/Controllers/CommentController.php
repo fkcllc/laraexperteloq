@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Comment;
 
-class CommentContoller extends Controller
+class CommentController extends Controller
 {
     //get all comments of a post
     public function index($id)
@@ -17,7 +17,7 @@ class CommentContoller extends Controller
             return response()->json(['message' => 'Post not found'], 404);
         }
 
-        return response(['post' => $post()->comments()->with(['user:id,name,image'])->get()], 200);
+        return response(['comments' => $post->comments()->with(['user:id,name,image'])->get()], 200);
     }
 
     //insert comment
