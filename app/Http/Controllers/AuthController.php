@@ -103,4 +103,36 @@ class AuthController extends Controller
             'user' => auth()->user()
         ], 200);
     }
+
+    /**
+     * Update authenticated user
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request)
+    {
+        $attrs = $request->validate([
+            'name' => 'required|string|max:255',
+            // 'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            // 'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        // if ($request->has('password')) {
+        //     $attrs['password'] = bcrypt($request->password);
+        // }
+
+
+        if ($request->has('image')) {
+            $image = $this->saveImage($request->image, 'profiles');
+        }
+
+        $user = auth()->user();
+        $user->update([
+            'name' => $attrs['name'],
+            'image' => $image ?? $user->image,
+            ]);
+
+        return response(['message' => 'User updated successfully', 'user' => $user], 200);
+    }
 }

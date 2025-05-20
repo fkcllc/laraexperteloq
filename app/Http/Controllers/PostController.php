@@ -14,7 +14,16 @@ class PostController extends Controller
     public function index()
     {
 
-        $posts = Post::orderBy('created_at','desc')->with('user:id,name,image')->withCount('comments','likes')->get();
+        $posts = Post::orderBy('created_at','desc')
+                    ->with('user:id,name,image')
+                    ->withCount('comments','likes')
+                    ->with('likes', function ($like) {
+                        $like->where('user_id', auth()->id())
+                            ->select('id', 'post_id', 'user_id')
+                            ->get();
+                    })
+                    ->get();
+
         return response(['posts' => $posts], 200);
     }
 
@@ -43,8 +52,6 @@ class PostController extends Controller
     //     return respose(['post' => PostArr::where('id', $id)->withCount('comments','likes')->get()], 200);
     // }
 
-
-
     // insert post
     public function store(Request $request)
     {
@@ -53,11 +60,13 @@ class PostController extends Controller
             'body' => 'required|string',
         ]);
 
+        $image = $this->saveImage($request->image, 'posts');
+
         $post = Post::create([
             'user_id' => auth()->id(),
             // 'title' => $request->title,
             'body' => $attrs['body'],
-            // 'image' => $request->image,
+            'image' => $image,
         ]);
 
         return response(['message' => 'Post added.','post' => $post],200);
