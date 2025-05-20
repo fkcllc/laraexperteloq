@@ -80,7 +80,7 @@ class PostController extends Controller
             'body' => 'required|string',
         ]);
 
-        $post->update(['body' => $attrs('body')]);
+        $post->update(['body' => $attrs['body']]);
 
         return response(['message' => 'Post updated.','post' => $post],200);
     }
