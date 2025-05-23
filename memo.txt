@@ -1,0 +1,5 @@
+--------GitのレポジトリのClone後以下の通りにDBをMigrateする
+①DBにスキーマを作成
+②プロジェクトフォルダに.envファイルを作成し①のスキーマを設定
+③php artisan config:clear　コマンドを実行
+④php artisan migrate　　　　コマンドを実行
