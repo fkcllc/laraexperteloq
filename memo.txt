@@ -3,3 +3,7 @@
 ②プロジェクトフォルダに.envファイルを作成し①のスキーマを設定
 ③php artisan config:clear　コマンドを実行
 ④php artisan migrate　　　　コマンドを実行
+
+--------Used Links
+https://laravel.com/docs/9.x/sanctum
+https://www.youtube.com/watch?v=5NqRWhoo7iA&list=PL0qWGthGFUCjFDgYI2k_-TqMNA7925c1s&index=1

@@ -8,8 +8,6 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    // https://laravel.com/docs/9.x/sanctum
-    // https://www.youtube.com/watch?v=099M0k_qoXA&list=PL0qWGthGFUCjFDgYI2k_-TqMNA7925c1s&index=3
 
     /**
      * Register a new user
